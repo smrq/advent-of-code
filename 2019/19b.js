@@ -9,30 +9,14 @@ const tests = [];
 async function run(input) {
 	const mem = input.split(',').map(x => parseInt(x, 10));
 	
-	let x = 0;
-	for (let y = 1000; ; ++y) {
-		const start0 = await beamStart(mem, x, y);
-		const end0 = await beamEnd(mem, start0, y);
-		const start1 = await beamStart(mem, start0, y+99);
-		if (end0 >= start1 + 99) {
-			return [start1, y];
+	for (let x = 0, y = 1000; ; ++y) {
+		while (await tryCoords(mem, x, y+99) !== 1) {
+			++x;
 		}
-		x = start0;
+		if (await tryCoords(mem, x+99, y) === 1) {
+			return x * 10000 + y;
+		}
 	}
-}
-
-async function beamStart(mem, x, y) {
-	while (await tryCoords(mem, x, y) !== 1) {
-		++x;
-	}
-	return x;
-}
-
-async function beamEnd(mem, x, y) {
-	while (await tryCoords(mem, x, y) === 1) {
-		++x;
-	}
-	return x - 1;	
 }
 
 async function tryCoords(mem, x, y) {
