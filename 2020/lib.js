@@ -1,3 +1,5 @@
+const assert = require('assert');
+const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs');
 
@@ -6,6 +8,15 @@ function getRawInput() {
 		path.basename(process.argv[1], '.js').replace(/\D+$/, '') + '.txt');
 	const input = fs.readFileSync(inputFilename, 'utf-8').trim();
 	return input;
+}
+
+function runTests(f, tests) {
+	assert.ok(tests.length % 2 === 0, 'Tests must be an interleaved array of inputs and outputs');
+	for (let i = 0; i < tests.length; i += 2) {
+		const input = tests[i];
+		const output = tests[i+1];
+		assert.strictEqual(f(input), output);
+	}
 }
 
 function astar({ start, goal, key, neighbors, cost, heuristic }) {
@@ -61,7 +72,22 @@ function astar({ start, goal, key, neighbors, cost, heuristic }) {
 	}
 }
 
+function *permutations(arr) {
+	if (arr.length === 1) yield arr;
+	for (let k = 0; k < arr.length; ++k) {
+		for (let p of permutations([
+			...arr.slice(0, k),
+			...arr.slice(k+1)
+		])) {
+			yield [arr[k], ...p];
+		}
+	}
+}
+
 module.exports = {
+	chalk,
 	getRawInput,
+	runTests,
 	astar,
+	permutations,
 };

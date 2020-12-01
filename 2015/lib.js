@@ -72,9 +72,22 @@ function astar({ start, goal, key, neighbors, cost, heuristic }) {
 	}
 }
 
+function *permutations(arr) {
+	if (arr.length === 1) yield arr;
+	for (let k = 0; k < arr.length; ++k) {
+		for (let p of permutations([
+			...arr.slice(0, k),
+			...arr.slice(k+1)
+		])) {
+			yield [arr[k], ...p];
+		}
+	}
+}
+
 module.exports = {
 	chalk,
 	getRawInput,
 	runTests,
 	astar,
+	permutations,
 };
