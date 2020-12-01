@@ -41,7 +41,7 @@ class PriorityQueue {
 	}
 }
 
-function astar({ start, goal, key, neighbors, cost, heuristic }) {
+function astar({ start, goal, key, neighbors, cost, heuristic, progress, progressFrequency }) {
 	const parents = new Map();
 
 	const gScores = new Map();
@@ -55,6 +55,8 @@ function astar({ start, goal, key, neighbors, cost, heuristic }) {
 	const openSet = new PriorityQueue();
 	openSet.push(start, heuristic(start, goal));
 
+	let iteration = 0;
+
 	while (openSet.length) {
 		const current = openSet.pop();
 		const keyCurrent = key(current);
@@ -63,10 +65,12 @@ function astar({ start, goal, key, neighbors, cost, heuristic }) {
 			return getPath(parents, current);
 		}
 
+		const gScoreCurrent = gScores.get(keyCurrent);
+
 		for (let neighbor of neighbors(current)) {
 			const keyNeighbor = key(neighbor);
 
-			const gScore = gScores.get(keyCurrent) + cost(current, neighbor);
+			const gScore = gScoreCurrent + cost(current, neighbor);
 			if (!gScores.has(keyNeighbor) ||
 				gScores.get(keyNeighbor) > gScore
 			) {
@@ -76,6 +80,12 @@ function astar({ start, goal, key, neighbors, cost, heuristic }) {
 				// fScores.set(keyNeighbor, gScore + hScore);
 				openSet.push(neighbor, gScore + hScore);
 			}
+		}
+
+		++iteration;
+
+		if (progress && (!progressFrequency || iteration % progressFrequency === 0)) {
+			progress(iteration, gScores.size, openSet.length, gScoreCurrent, heuristic(current, goal), current);
 		}
 	}
 
