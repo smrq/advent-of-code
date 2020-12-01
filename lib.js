@@ -15,7 +15,7 @@ function runTests(f, tests) {
 	for (let i = 0; i < tests.length; i += 2) {
 		const input = tests[i];
 		const output = tests[i+1];
-		assert.strictEqual(f(input), output);
+		assert.deepStrictEqual(f(input), output);
 	}
 }
 
