@@ -1,4 +1,4 @@
-const { getRawInput, permutations } = require('./lib');
+const { getRawInput, permutations } = require('../lib');
 const rawInput = getRawInput();
 
 const map = parseInput(rawInput);

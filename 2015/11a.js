@@ -1,4 +1,4 @@
-const { runTests } = require('./lib');
+const { runTests } = require('../lib');
 
 const rawInput = 'hxbxwxba';
 

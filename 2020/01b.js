@@ -1,4 +1,4 @@
-const { getRawInput, astar } = require('./lib');
+const { getRawInput } = require('../lib');
 const rawInput = getRawInput();
 const input = rawInput.split('\n').map(x => +x);
 

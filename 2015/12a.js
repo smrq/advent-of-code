@@ -1,4 +1,4 @@
-const { getRawInput } = require('./lib');
+const { getRawInput } = require('../lib');
 const rawInput = getRawInput();
 const input = JSON.parse(rawInput);
 
