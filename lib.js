@@ -120,6 +120,10 @@ function sum(arr) {
 	return arr.reduce((a, b) => a + b, 0);
 }
 
+function product(arr) {
+	return arr.reduce((a, b) => a * b, 1);
+}
+
 module.exports = {
 	chalk,
 	getRawInput,
@@ -128,4 +132,5 @@ module.exports = {
 	astar,
 	permutations,
 	sum,
+	product,
 };
