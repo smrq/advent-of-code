@@ -124,6 +124,7 @@ module.exports = {
 	chalk,
 	getRawInput,
 	runTests,
+	PriorityQueue,
 	astar,
 	permutations,
 	sum,
