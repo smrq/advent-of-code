@@ -116,10 +116,15 @@ function *permutations(arr) {
 	}
 }
 
+function sum(arr) {
+	return arr.reduce((a, b) => a + b, 0);
+}
+
 module.exports = {
 	chalk,
 	getRawInput,
 	runTests,
 	astar,
 	permutations,
+	sum,
 };
