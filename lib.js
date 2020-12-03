@@ -124,6 +124,39 @@ function product(arr) {
 	return arr.reduce((a, b) => a * b, 1);
 }
 
+// x^p % r
+function bigIntPowerRemainder(x, p, r) {
+	if (p === 0n) {
+		return 1n;
+	}
+
+	const powersOfX = new Map();
+	for (let i = 1n, n = x;
+		i <= p;
+		i *= 2n, n = (n * n) % r
+	) {
+		powersOfX.set(i, n);
+	}
+
+	let n = 1n;
+	while (p > 0n) {
+		const powerOf2 = bigIntLargestPowerOf2Below(p);
+		const powerOfX = powersOfX.get(powerOf2);
+		n = n * powerOfX % r;
+		p -= powerOf2;
+	}
+
+	return n % r;
+}
+
+function bigIntLargestPowerOf2Below(n) {
+	let x = 1n;
+	while (x <= n) {
+		x *= 2n;
+	}
+	return x / 2n;
+}
+
 module.exports = {
 	chalk,
 	getRawInput,
@@ -133,4 +166,6 @@ module.exports = {
 	permutations,
 	sum,
 	product,
+	bigIntPowerRemainder,
+	bigIntLargestPowerOf2Below,
 };
