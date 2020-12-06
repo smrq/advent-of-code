@@ -1,4 +1,4 @@
-const { chalk, getRawInput, runTests, PriorityQueue, astar, permutations, sum, product, bigIntPowerRemainder, bigIntLargestPowerOf2Below } = require('../lib');
+const { chalk, getRawInput, runTests, PriorityQueue, astar, permutations, sum, product, bigIntPowerRemainder, bigIntLargestPowerOf2Below, setUnion, setIntersection, setDifference } = require('../lib');
 
 const rawInput = getRawInput();
 const input = parseInput(rawInput);

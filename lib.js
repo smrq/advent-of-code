@@ -157,6 +157,35 @@ function bigIntLargestPowerOf2Below(n) {
 	return x / 2n;
 }
 
+function setUnion(...sets) {
+	return sets.reduce((result, set) => {
+		for (let item of set) {
+			result.add(item);
+		}
+		return result;
+	}, new Set());
+}
+
+function setIntersection(set1, ...sets) {
+	const result = new Set(set1);
+	for (let item of set1) {
+		if (sets.some(s => !s.has(item))) {
+			result.delete(item);
+		}
+	}
+	return result;
+}
+
+function setDifference(a, b) {
+	const result = new Set();
+	for (let item of a) {
+		if (!b.has(item)) {
+			result.add(item);
+		}
+	}
+	return result;
+}
+
 module.exports = {
 	chalk,
 	getRawInput,
@@ -168,4 +197,7 @@ module.exports = {
 	product,
 	bigIntPowerRemainder,
 	bigIntLargestPowerOf2Below,
+	setUnion,
+	setIntersection,
+	setDifference,
 };
