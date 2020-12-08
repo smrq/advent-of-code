@@ -42,6 +42,10 @@ class PriorityQueue {
 }
 
 function astar({ start, goal, key, neighbors, cost, heuristic, progress, progressFrequency }) {
+	if (!key) key = x => x;
+	if (!cost) cost = () => 1;
+	if (!heuristic) heuristic = () => 0;
+
 	const parents = new Map();
 
 	const gScores = new Map();
@@ -186,8 +190,14 @@ function setDifference(a, b) {
 	return result;
 }
 
+function D(...args) {
+	// Log debug output to stderr so that stdout only contains the program result
+	process.stderr.write(chalk.red('[DEBUG] '))
+	console.error(...args);
+}
+
 module.exports = {
-	chalk,
+	D,
 	getRawInput,
 	runTests,
 	PriorityQueue,
