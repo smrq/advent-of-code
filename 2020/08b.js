@@ -9,14 +9,14 @@ function run(input) {
 	for (let i = 0; i < input.length; ++i) {
 		if (input[i].op === 'jmp') {
 			input[i].op = 'nop';
-			const r = run2(input);
+			const r = interpret(input);
 			if (r != null) {
 				return r;
 			}
 			input[i].op = 'jmp';
 		} else if (input[i].op === 'nop') {
 			input[i].op = 'jmp';
-			const r = run2(input);
+			const r = interpret(input);
 			if (r != null) {
 				return r;
 			}
@@ -25,16 +25,21 @@ function run(input) {
 	}
 }
 
-function run2(input) {
+function parseInput(str) {
+	return str.split('\n').map(parseInstruction);
+}
+
+// INTCODE
+
+function interpret(program) {
 	let acc = 0;
 	let pc = 0;
 	let visited = new Set();
-	while (pc < input.length) {
-		if (visited.has(pc)) {
-			return null;
-		}
+	while (pc < program.length && pc >= 0) {
+		if (visited.has(pc)) return null;
 		visited.add(pc);
-		const { op, value } = input[pc];
+
+		const { op, value } = program[pc];
 		switch (op) {
 			case 'nop':
 				++pc;
@@ -51,9 +56,7 @@ function run2(input) {
 	return acc;
 }
 
-function parseInput(str) {
-	return str.split('\n').map(line => {
-		const [op, value] = line.split(' ');
-		return { op, value: +value };
-	});
+function parseInstruction(str) {
+	const [op, value] = str.split(' ');
+	return { op, value: +value };
 }

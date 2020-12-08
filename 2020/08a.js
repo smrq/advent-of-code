@@ -6,12 +6,24 @@ const input = parseInput(rawInput);
 console.log(run(input));
 
 function run(input) {
+	return interpret(input);
+}
+
+function parseInput(str) {
+	return str.split('\n').map(parseInstruction);
+}
+
+// INTCODE
+
+function interpret(program) {
 	let acc = 0;
 	let pc = 0;
 	let visited = new Set();
-	while (!visited.has(pc)) {
+	while (pc < program.length && pc >= 0) {
+		if (visited.has(pc)) break;
 		visited.add(pc);
-		const { op, value } = input[pc];
+
+		const { op, value } = program[pc];
 		switch (op) {
 			case 'nop':
 				++pc;
@@ -28,9 +40,7 @@ function run(input) {
 	return acc;
 }
 
-function parseInput(str) {
-	return str.split('\n').map(line => {
-		const [op, value] = line.split(' ');
-		return { op, value: +value };
-	});
+function parseInstruction(str) {
+	const [op, value] = str.split(' ');
+	return { op, value: +value };
 }
