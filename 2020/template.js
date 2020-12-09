@@ -20,9 +20,13 @@ function run(input) {
 }
 
 function parseInput(str) {
-	// return str.split('\n').map(parseInstruction);
 	return str.split('\n').map(line => {
-		return line.split('').map(x => x);
+		return line;
+		// return parseInstruction(line);
+		// return line.split('').map(x => x);
+
+		// const [_, a, b] = /(\w+) (\d+)/.exec(line);
+		// return [a, b];
 	});
 }
 
