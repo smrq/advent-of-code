@@ -190,6 +190,42 @@ function setDifference(a, b) {
 	return result;
 }
 
+function *iter1(arr) {
+	for (let i = 0; i < arr.length; ++i) {
+		yield i;
+	}
+}
+
+function *iter2(arr) {
+	for (let i = 0; i < arr.length; ++i) {
+		for (let j = i + 1; j < arr.length; ++j) {
+			yield [i, j];
+		}
+	}
+}
+
+function *iter3(arr) {
+	for (let i = 0; i < arr.length; ++i) {
+		for (let j = i + 1; j < arr.length; ++j) {
+			for (let k = j + 1; k < arr.length; ++k) {
+				yield [i, j, k];
+			}
+		}
+	}
+}
+
+function *iter4(arr) {
+	for (let i = 0; i < arr.length; ++i) {
+		for (let j = i + 1; j < arr.length; ++j) {
+			for (let k = j + 1; k < arr.length; ++k) {
+				for (let l = k + 1; l < arr.length; ++l) {
+					yield [i, j, k, l];
+				}
+			}
+		}
+	}
+}
+
 function D(...args) {
 	// Log debug output to stderr so that stdout only contains the program result
 	process.stderr.write(chalk.red('[DEBUG] '))
@@ -210,4 +246,8 @@ module.exports = {
 	setUnion,
 	setIntersection,
 	setDifference,
+	iter1,
+	iter2,
+	iter3,
+	iter4,
 };

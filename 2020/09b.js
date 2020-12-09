@@ -1,4 +1,4 @@
-const { getRawInput, runTests, sum } = require('../lib');
+const { getRawInput, runTests, sum, iter2 } = require('../lib');
 
 const rawInput = getRawInput();
 const input = parseInput(rawInput);
@@ -30,12 +30,10 @@ runTests(args => run(...args), [
 console.log(run(input, 507622668));
 
 function run(input, N) {
-	for (let i = 0; i < input.length; ++i) {
-		for (let j = i + 1; j < input.length; ++j) {
-			const range = input.slice(i, j);
-			if (sum(range) === N) {
-				return Math.max(...range) + Math.min(...range);
-			}
+	for (let [i, j] of iter2(input)) {
+		const range = input.slice(i, j);
+		if (sum(range) === N) {
+			return Math.max(...range) + Math.min(...range);
 		}
 	}
 }

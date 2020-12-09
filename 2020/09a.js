@@ -1,4 +1,4 @@
-const { getRawInput } = require('../lib');
+const { getRawInput, iter2 } = require('../lib');
 
 const rawInput = getRawInput();
 const input = parseInput(rawInput);
@@ -20,10 +20,8 @@ function run(input) {
 
 function isSum(set, n) {
 	let arr = [...set];
-	for (let i = 0; i < arr.length; ++i) {
-		for (let j = i + 1; j < arr.length; ++j) {
-			if (arr[i] + arr[j] === n) return true;
-		}
+	for (let [i, j] of iter2(arr)) {
+		if (arr[i] + arr[j] === n) return true;
 	}
 	return false;
 }
