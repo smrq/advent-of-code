@@ -6,8 +6,5 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "^3.0.0"
-  },
-  "scripts": {
-    "start": "f() { bash -c \"cd \\\"$1\\\"; FORCE_COLOR=true node \\\"$2\\\" | tee >(pbcopy)\"; }; f"
   }
 }

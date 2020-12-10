@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "scripts": {
+    "start": "f() { bash -c \"FORCE_COLOR=true node \\\"$1\\\" | tee >(pbcopy)\"; }; f",
+    "dl": "f() { curl -H Cookie:session=$(cat ../session.txt) https://adventofcode.com/2020/day/${1#0}/input > $1.txt; }; f"
+  }
+}

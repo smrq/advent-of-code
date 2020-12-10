@@ -1,4 +1,7 @@
-const { D, getRawInput, runTests, PriorityQueue, astar, permutations, sum, product, bigIntPowerRemainder, bigIntLargestPowerOf2Below, setUnion, setIntersection, setDifference, iter1, iter2, iter3, iter4 } = require('../lib');
+const {
+	D, getRawInput, runTests, PriorityQueue, astar, permutations, sum, product, bigIntPowerRemainder, bigIntLargestPowerOf2Below,
+	setUnion, setIntersection, setDifference, iter1, iter2, iter3, iter4
+} = require('../lib');
 
 const rawInput = getRawInput();
 const input = parseInput(rawInput);
@@ -37,10 +40,10 @@ function parseInput(str) {
 function interpret(program) {
 	let acc = 0;
 	let pc = 0;
-	let visited = new Set();
+	// let visited = new Set();
 	while (pc < program.length && pc >= 0) {
-		if (visited.has(pc)) break;
-		visited.add(pc);
+		// if (visited.has(pc)) break;
+		// visited.add(pc);
 
 		const { op, value } = program[pc];
 		switch (op) {

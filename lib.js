@@ -3,6 +3,12 @@ const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs');
 
+function D(...args) {
+	// Log debug output to stderr so that stdout only contains the program result
+	process.stderr.write(chalk.red('[DEBUG] '))
+	console.error(...args);
+}
+
 function getRawInput() {
 	const inputFilename = path.resolve(process.cwd(),
 		path.basename(process.argv[1], '.js').replace(/\D+$/, '') + '.txt');
@@ -226,10 +232,17 @@ function *iter4(arr) {
 	}
 }
 
-function D(...args) {
-	// Log debug output to stderr so that stdout only contains the program result
-	process.stderr.write(chalk.red('[DEBUG] '))
-	console.error(...args);
+function memo(f) {
+	const memos = new Map();
+	return (...args) => {
+		const key = JSON.stringify(args);
+		if (memos.has(key)) {
+			return memos.get(key);
+		}
+		const result = f(...args);
+		memos.set(key, result);
+		return result;
+	}
 }
 
 module.exports = {
@@ -250,4 +263,5 @@ module.exports = {
 	iter2,
 	iter3,
 	iter4,
+	memo,
 };
