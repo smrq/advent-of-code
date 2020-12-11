@@ -1,6 +1,6 @@
 const {
 	D, getRawInput, runTests, PriorityQueue, astar, permutations, sum, product, bigIntPowerRemainder, bigIntLargestPowerOf2Below,
-	setUnion, setIntersection, setDifference, iter1, iter2, iter3, iter4
+	setUnion, setIntersection, setDifference, iter1, iter2, iter3, iter4, memo
 } = require('../lib');
 
 const rawInput = getRawInput();
@@ -25,6 +25,7 @@ function run(input) {
 function parseInput(str) {
 	return str.split('\n').map(line => {
 		return line;
+		// return parseInt(line, 10);
 		// return parseInstruction(line);
 		// return line.split('').map(x => x);
 
