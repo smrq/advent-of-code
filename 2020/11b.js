@@ -1,4 +1,4 @@
-const { getRawInput, runTests, cell2d, flatten } = require('../lib');
+const { getRawInput, runTests, orthodiagonalOffsets, cell2d, flatten } = require('../lib');
 
 const rawInput = getRawInput();
 const input = parseInput(rawInput);
@@ -22,47 +22,14 @@ console.log(run(input));
 function run(input) {
 	input = cell2d({
 		grid: input,
-		neighborCoords: (x, y, grid) => {
-			const result = [];
+		neighbors: (grid, x, y) => {
 			function inBounds(x, y) { return x >= 0 && y >= 0 && x < grid[0].length && y < grid.length; }
-			for (let xx = x-1, yy = y-1; inBounds(xx, yy); --xx, --yy) {
-				if (grid[yy][xx] === 'L' || grid[yy][xx] === '#') {
-					result.push([xx, yy]); break;
-				}
-			}
-			for (let xx = x-1, yy = y; inBounds(xx, yy); --xx) {
-				if (grid[yy][xx] === 'L' || grid[yy][xx] === '#') {
-					result.push([xx, yy]); break;
-				}
-			}
-			for (let xx = x-1, yy = y+1; inBounds(xx, yy); --xx, ++yy) {
-				if (grid[yy][xx] === 'L' || grid[yy][xx] === '#') {
-					result.push([xx, yy]); break;
-				}
-			}
-			for (let xx = x, yy = y-1; inBounds(xx, yy); --yy) {
-				if (grid[yy][xx] === 'L' || grid[yy][xx] === '#') {
-					result.push([xx, yy]); break;
-				}
-			}
-			for (let xx = x, yy = y+1; inBounds(xx, yy); ++yy) {
-				if (grid[yy][xx] === 'L' || grid[yy][xx] === '#') {
-					result.push([xx, yy]); break;
-				}
-			}
-			for (let xx = x+1, yy = y-1; inBounds(xx, yy); ++xx, --yy) {
-				if (grid[yy][xx] === 'L' || grid[yy][xx] === '#') {
-					result.push([xx, yy]); break;
-				}
-			}
-			for (let xx = x+1, yy = y; inBounds(xx, yy); ++xx) {
-				if (grid[yy][xx] === 'L' || grid[yy][xx] === '#') {
-					result.push([xx, yy]); break;
-				}
-			}
-			for (let xx = x+1, yy = y+1; inBounds(xx, yy); ++xx, ++yy) {
-				if (grid[yy][xx] === 'L' || grid[yy][xx] === '#') {
-					result.push([xx, yy]); break;
+			const result = [];
+			for (let [dx, dy] of orthodiagonalOffsets(2)) {
+				for (let xx = x+dx, yy = y+dy; inBounds(xx, yy); xx += dx, yy += dy) {
+					if (grid[yy][xx] === 'L' || grid[yy][xx] === '#') {
+						result.push(grid[yy][xx]); break;
+					}
 				}
 			}
 			return result;

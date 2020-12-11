@@ -1,6 +1,6 @@
 const {
 	D, getRawInput, runTests, PriorityQueue, astar, permutations, sum, product, bigIntPowerRemainder, bigIntLargestPowerOf2Below,
-	setUnion, setIntersection, setDifference, iter1, iter2, iter3, iter4, memo
+	setUnion, setIntersection, setDifference, iter1, iter2, iter3, iter4, memo, orthodiagonalOffsets, cell2d, cell3d, flatten,
 } = require('../lib');
 
 const rawInput = getRawInput();

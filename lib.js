@@ -245,21 +245,25 @@ function memo(f) {
 	}
 }
 
-function cell2d({ grid, rule, neighborCoords, finished }) {
+const orthodiagonalOffsets = memo(function orthodiagonalOffsets(dimensions) {
+	const result = [];
+	for (let i = 0; i < 3**dimensions; ++i) {
+		const offsets = Array(dimensions).fill().map((_, d) => (i / 3**d | 0) % 3 - 1);
+		if (offsets.every(o => o === 0)) continue;
+		result.push(offsets);
+	}
+	return result;
+});
+
+function cell2d({ grid, rule, neighbors, finished }) {
 	const width = grid[0].length;
 	const height = grid.length;
+	const neighborOffsets = orthodiagonalOffsets(2);
 
-	neighborCoords = neighborCoords || (
-		(x, y) => [
-			[x-1,y-1],
-			[x-1,y  ],
-			[x-1,y+1],
-			[x  ,y-1],
-			[x  ,y+1],
-			[x+1,y-1],
-			[x+1,y  ],
-			[x+1,y+1],
-		].filter(([x, y]) => x >= 0 && y >= 0 && x < width && y < height)
+	neighbors = neighbors || (
+		(grid, x, y) => neighborOffsets.map(o => [x+o[0], y+o[1]])
+			.filter(([x, y]) => x >= 0 && y >= 0 && x < width && y < height)
+			.map(([x, y]) => grid[y][x])
 	);
 
 	finished = finished || (
@@ -270,14 +274,44 @@ function cell2d({ grid, rule, neighborCoords, finished }) {
 		const last = grid;
 		let changed = false;
 		grid = grid.map((line, y) => line.map((current, x) => {
-			const coords = neighborCoords(x, y, grid);
-			const neighbors = coords.map(([x, y]) => grid[y][x]);
-			const updated = rule(current, neighbors, x, y);
+			const updated = rule(current, neighbors(grid, x, y), x, y);
 			if (updated !== current) {
 				changed = true;
 			}
 			return updated;
 		}));
+		if (finished({ last, grid, changed })) {
+			return grid;
+		}
+	}
+}
+
+function cell3d({ grid, rule, neighbors, finished }) {
+	const width = grid[0][0].length;
+	const height = grid[0].length;
+	const depth = grid.length;
+	const neighborOffsets = orthodiagonalOffsets(3);
+
+	neighbors = neighbors || (
+		(grid, x, y, z) => neighborOffsets.map(o => [x+o[0], y+o[1], z+o[2]])
+			.filter(([x, y, z]) => x >= 0 && y >= 0 && z >= 0 && x < width && y < height && z < depth)
+			.map(([x, y, z]) => grid[z][y][x])
+	);
+
+	finished = finished || (
+		({ changed }) => !changed
+	);
+
+	for (;;) {
+		const last = grid;
+		let changed = false;
+		grid = grid.map((plane, z) => plane.map((line, y) => line.map((current, x) => {
+			const updated = rule(current, neighbors(grid, x, y, z), x, y, z);
+			if (updated !== current) {
+				changed = true;
+			}
+			return updated;
+		})));
 		if (finished({ last, grid, changed })) {
 			return grid;
 		}
@@ -308,6 +342,8 @@ module.exports = {
 	iter3,
 	iter4,
 	memo,
+	orthodiagonalOffsets,
 	cell2d,
+	cell3d,
 	flatten,
 };
