@@ -245,6 +245,50 @@ function memo(f) {
 	}
 }
 
+function cell2d({ grid, rule, neighborCoords, finished }) {
+	const width = grid[0].length;
+	const height = grid.length;
+
+	neighborCoords = neighborCoords || (
+		(x, y) => [
+			[x-1,y-1],
+			[x-1,y  ],
+			[x-1,y+1],
+			[x  ,y-1],
+			[x  ,y+1],
+			[x+1,y-1],
+			[x+1,y  ],
+			[x+1,y+1],
+		].filter(([x, y]) => x >= 0 && y >= 0 && x < width && y < height)
+	);
+
+	finished = finished || (
+		({ changed }) => !changed
+	);
+
+	for (;;) {
+		const last = grid;
+		let changed = false;
+		grid = grid.map((line, y) => line.map((current, x) => {
+			const coords = neighborCoords(x, y, grid);
+			const neighbors = coords.map(([x, y]) => grid[y][x]);
+			const updated = rule(current, neighbors, x, y);
+			if (updated !== current) {
+				changed = true;
+			}
+			return updated;
+		}));
+		if (finished({ last, grid, changed })) {
+			return grid;
+		}
+	}
+}
+
+function flatten(arr) {
+	if (!Array.isArray(arr)) return arr;
+	return [].concat(...arr.map(flatten));
+}
+
 module.exports = {
 	D,
 	getRawInput,
@@ -264,4 +308,6 @@ module.exports = {
 	iter3,
 	iter4,
 	memo,
+	cell2d,
+	flatten,
 };

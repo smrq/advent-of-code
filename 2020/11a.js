@@ -1,4 +1,4 @@
-const { getRawInput, runTests } = require('../lib');
+const { getRawInput, runTests, cell2d, flatten } = require('../lib');
 
 const rawInput = getRawInput();
 const input = parseInput(rawInput);
@@ -20,41 +20,15 @@ L.LLLLL.LL`),
 console.log(run(input));
 
 function run(input) {
-	for (;;) {
-		let changed = false;
-		input = input.map((line, y) => line.map((_, x) => {
-			const neighbors = [
-				[y-1,x-1],
-				[y-1,x],
-				[y-1,x+1],
-				[y,x-1],
-				[y,x+1],
-				[y+1,x-1],
-				[y+1,x],
-				[y+1,x+1],
-			]
-			.filter(([y, x]) => y >= 0 && y < input.length && x >= 0 && x < input[0].length)
-			.map(([y, x]) => input[y][x]);
-
-			if (input[y][x] === 'L' && neighbors.every(n => n !== '#')) {
-				changed = true;
-				return '#';
-			}
-
-			if (input[y][x] === '#' && neighbors.filter(n => n === '#').length >= 4) {
-				changed = true;
-				return 'L';
-			}
-
-			return input[y][x];
-		}));
-		if (!changed) break;
-	}
-	return serialize(input).split('').filter(x => x === '#').length;
-}
-
-function serialize(input) {
-	return input.map(x => x.join('')).join('\n');
+	input = cell2d({
+		grid: input,
+		rule: (current, neighbors) => {
+			if (current === 'L' && !neighbors.some(n => n === '#')) return '#';
+			if (current === '#' && neighbors.filter(n => n === '#').length >= 4) return 'L';
+			return current;
+		}
+	});
+	return flatten(input).filter(x => x === '#').length;
 }
 
 function parseInput(str) {
