@@ -5,7 +5,6 @@ const fs = require('fs');
 
 function D(...args) {
 	// Log debug output to stderr so that stdout only contains the program result
-	process.stderr.write(chalk.red('[DEBUG] '))
 	console.error(...args);
 }
 

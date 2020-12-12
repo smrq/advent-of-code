@@ -1,0 +1,22 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+			"folder_exclude_patterns": [".git", "node_modules"]
+		}
+	],
+	"build_systems":
+	[
+		{
+			"name": "Run script",
+			"file_patterns": ["*.js"],
+			"shell_cmd": "node \"$file\" | tee >(pbcopy)"
+		},
+		{
+			"name": "Download input",
+			"file_patterns": ["*.txt"],
+			"shell_cmd": "curl -H Cookie:session=\\$(cat $project_path/session.txt) https://adventofcode.com/\\$(echo $file_path | sed 's#^$project_path/##')/day/\\$(echo $file_base_name | sed 's/^0*//')/input > $file"
+		}
+	]
+}
