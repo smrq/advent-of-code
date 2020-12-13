@@ -10,7 +10,7 @@
 	[
 		{
 			"name": "Run script",
-			"file_patterns": ["*.js"],
+			"file_patterns": ["*.js", "*.mjs"],
 			"shell_cmd": "node \"$file\" | tee >(pbcopy)"
 		},
 		{
