@@ -377,6 +377,15 @@ function maxBy(arr, lookup) {
 	return selectBy(arr, lookup, (a, b) => a > b);
 }
 
+function gcd(a, b) {
+    if (a === 0) return b;
+    return gcd(b % a, a);
+}
+
+function lcm(a, b) {
+	return (a / gcd(a, b)) * b;
+}
+
 module.exports = {
 	D,
 	getRawInput,
@@ -406,4 +415,6 @@ module.exports = {
 	selectBy,
 	minBy,
 	maxBy,
+	gcd,
+	lcm,
 };

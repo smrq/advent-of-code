@@ -1,4 +1,4 @@
-const { getRawInput, runTests, modulo, bigIntChineseRemainder } = require('../lib');
+const { D, getRawInput, runTests } = require('../lib');
 
 const rawInput = getRawInput();
 const input = parseInput(rawInput);
@@ -12,9 +12,15 @@ parseInput(`939
 console.log(run(input));
 
 function run(buses) {
-	const N = buses.map(([bus, offset]) => BigInt(bus));
-	const A = buses.map(([bus, offset]) => BigInt(modulo(-offset, bus)));
-	return Number(bigIntChineseRemainder(A, N));
+	let step = 1;
+	let n = 1;
+	for (let [bus, offset] of buses) {
+		while ((n + offset) % bus !== 0) {
+			n += step;
+		}
+		step *= bus;
+	}
+	return n;
 }
 
 function parseInput(str) {

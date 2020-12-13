@@ -1,4 +1,4 @@
-const { getRawInput, runTests, modulo, minBy } = require('../lib');
+const { getRawInput, runTests, minBy } = require('../lib');
 
 const rawInput = getRawInput();
 const input = parseInput(rawInput);
@@ -13,8 +13,8 @@ console.log(run(input));
 
 function run(input) {
 	const { t, buses } = input;
-	const bus = minBy(buses, bus => modulo(-t, bus));
-	return bus * modulo(-t, bus);
+	const bus = minBy(buses, bus => bus - (t % bus));
+	return bus * (bus - (t % bus));
 }
 
 function parseInput(str) {
