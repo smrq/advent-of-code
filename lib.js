@@ -126,11 +126,16 @@ function *permutations(arr) {
 }
 
 function sum(arr) {
-	return arr.reduce((a, b) => a + b, 0);
+	return arr.reduce((a, b) => a + b);
 }
 
 function product(arr) {
-	return arr.reduce((a, b) => a * b, 1);
+	return arr.reduce((a, b) => a * b);
+}
+
+function modulo(x, m) {
+	while (x < 0) x += m;
+	return x % m;
 }
 
 // x^p % r
@@ -164,6 +169,33 @@ function bigIntLargestPowerOf2Below(n) {
 		x *= 2n;
 	}
 	return x / 2n;
+}
+
+// Modular multiplicative inverse
+// https://en.wikipedia.org/wiki/Modular_multiplicative_inverse
+// x where `ax % m == 1`
+function bigIntModMulInverse(a, m) {
+	let b = a % m;
+	for (let i = 1n; i < m; ++i) {
+		if ((b * i) % m == 1n) {
+			return i;
+		}
+	}
+	return 1n;
+}
+
+// Chinese remainder theorem
+// https://en.wikipedia.org/wiki/Chinese_remainder_theorem
+// x where `x % Ni == Ai` for all i
+function bigIntChineseRemainder(A, N) {
+	let prod = product(N);
+	let p;
+	let sum = 0n;
+	for (let i = 0; i < A.length; ++i) {
+		p = prod / N[i];
+		sum += A[i] * p * bigIntModMulInverse(p, N[i]);
+	}
+	return sum % prod;
 }
 
 function setUnion(...sets) {
@@ -322,6 +354,29 @@ function flatten(arr) {
 	return [].concat(...arr.map(flatten));
 }
 
+function selectBy(arr, lookup, compare) {
+	let result = arr[0];
+	let best = lookup(result);
+
+	for (let item of arr.slice(1)) {
+		let n = lookup(item);
+		if (compare(n, best)) {
+			result = item;
+			best = n;
+		}
+	}
+
+	return result;
+}
+
+function minBy(arr, lookup) {
+	return selectBy(arr, lookup, (a, b) => a < b);
+}
+
+function maxBy(arr, lookup) {
+	return selectBy(arr, lookup, (a, b) => a > b);
+}
+
 module.exports = {
 	D,
 	getRawInput,
@@ -331,8 +386,11 @@ module.exports = {
 	permutations,
 	sum,
 	product,
+	modulo,
 	bigIntPowerRemainder,
 	bigIntLargestPowerOf2Below,
+	bigIntModMulInverse,
+	bigIntChineseRemainder,
 	setUnion,
 	setIntersection,
 	setDifference,
@@ -345,4 +403,7 @@ module.exports = {
 	cell2d,
 	cell3d,
 	flatten,
+	selectBy,
+	minBy,
+	maxBy,
 };
