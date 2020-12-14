@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import fs from 'fs';
 import path from 'path';
 import { getRawInput } from '../lib.mjs';
-const input = getRawInput(false);
+const input = getRawInput();
 const tests = [];
 
 class PriorityQueue {
