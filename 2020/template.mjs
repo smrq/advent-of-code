@@ -1,9 +1,11 @@
 import {
-	D, PriorityQueue, astar, bigIntChineseRemainder, bigIntLargestPowerOf2Below,
-	bigIntModMulInverse, bigIntPowerRemainder, cell2d, cell3d, flatten, gcd,
-	getRawInput, iter1, iter2, iter3, iter4, lcm, maxBy, memo, minBy, modulo,
-	orthodiagonalOffsets, permutations, product, runTests, selectBy, setDifference,
-	setIntersection, setUnion, sum
+	D, getRawInput, runTests,
+	PriorityQueue, memo,
+	zip, sum, product, flatten, selectBy, minBy, maxBy, arrayUnion, arrayIntersection, arrayDifference, permutations,
+	setUnion, setIntersection, setDifference,
+	gcd, lcm, modulo, largestPowerOf2Below, powerRemainder, modMulInverse, chineseRemainder,
+	iter1, iter2, iter3, iter4,
+	astar, orthodiagonalOffsets, cell2d, cell3d,
 } from '../lib.mjs';
 
 const rawInput = getRawInput();
@@ -28,12 +30,7 @@ function run(input) {
 function parseInput(str) {
 	return str.split('\n').map(line => {
 		return line;
-		// return parseInt(line, 10);
-		// return parseInstruction(line);
 		// return line.split('').map(x => x);
-
-		// const [_, a, b] = /(\w+) (\d+)/.exec(line);
-		// return [a, b];
 	});
 }
 
