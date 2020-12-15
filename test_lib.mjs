@@ -89,6 +89,11 @@ lib.runTests(args => [...lib.permutations(args)], [
 	['a','b','c'], [['a','b','c'], ['a','c','b'], ['b','a','c'], ['b','c','a'], ['c','a','b'], ['c','b','a']],
 ]);
 
+lib.runTests(args => lib.indexOfAll(...args), [
+	[[1,2,1,3,4,1,5,1,1,6], 1], [0, 2, 5, 7, 8],
+	['abacdaeaaf', 'a'], [0, 2, 5, 7, 8],
+]);
+
 lib.runTests(args => lib.setUnion(...args), [
 	[new Set([1,2,3]), new Set([1,4,5]), new Set([4,2,3,6,5,7])], new Set([1,2,3,4,5,6,7]),
 ]);

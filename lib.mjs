@@ -161,6 +161,16 @@ export function *permutations(arr) {
 	}
 }
 
+export function indexOfAll(arr, item) {
+	const result = [];
+	for (let i = 0; i < arr.length; ++i) {
+		if (item == arr[i]) {
+			result.push(i);
+		}
+	}
+	return result;
+}
+
 /* Sets */
 
 export function setUnion(...sets) {
