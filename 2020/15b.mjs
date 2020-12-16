@@ -1,7 +1,7 @@
-import { D, getRawInput } from '../lib.mjs';
+import { D, getRawInput, autoparse } from '../lib.mjs';
 
 const rawInput = getRawInput();
-const input = parseInput(rawInput);
+const input = autoparse(rawInput);
 
 console.log(run(input));
 
@@ -29,8 +29,4 @@ function run(input) {
 		}
 	}
 	return last;
-}
-
-function parseInput(str) {
-	return str.split(',').map(n => +n);
 }

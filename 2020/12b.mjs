@@ -1,10 +1,10 @@
-import { getRawInput, runTests } from '../lib.mjs';
+import { getRawInput, autoparse, runTests } from '../lib.mjs';
 
 const rawInput = getRawInput();
-const input = parseInput(rawInput);
+const input = autoparse(rawInput);
 
 runTests(args => run(args), [
-parseInput(`F10
+autoparse(`F10
 N3
 F7
 R90
@@ -46,10 +46,4 @@ function run(input) {
 		}
 	}
 	return Math.abs(x) + Math.abs(y);
-}
-
-function parseInput(str) {
-	return str.split('\n').map(line => {
-		return [line[0], +line.slice(1)];
-	});
 }

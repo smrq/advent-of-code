@@ -1,4 +1,4 @@
-import { getRawInput, runTests, sum, iter2 } from '../lib.mjs';
+import { getRawInput, runTests, sum, range } from '../lib.mjs';
 
 const rawInput = getRawInput();
 const input = parseInput(rawInput);
@@ -30,10 +30,12 @@ runTests(args => run(...args), [
 console.log(run(input, 507622668));
 
 function run(input, N) {
-	for (let [i, j] of iter2(input)) {
-		const range = input.slice(i, j);
-		if (sum(range) === N) {
-			return Math.max(...range) + Math.min(...range);
+	for (let i of range(0, input.length)) {
+		for (let j of range(i+1, input.length)) {
+			const items = input.slice(i, j);
+			if (sum(items) === N) {
+				return Math.max(...items) + Math.min(...items);
+			}
 		}
 	}
 }

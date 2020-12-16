@@ -1,4 +1,4 @@
-import { getRawInput, iter2 } from '../lib.mjs';
+import { getRawInput, range } from '../lib.mjs';
 
 const rawInput = getRawInput();
 const input = parseInput(rawInput);
@@ -20,8 +20,10 @@ function run(input) {
 
 function isSum(set, n) {
 	let arr = [...set];
-	for (let [i, j] of iter2(arr)) {
-		if (arr[i] + arr[j] === n) return true;
+	for (let i of range(0, arr.length)) {
+		for (let j of range(i+1, arr.length)) {
+			if (arr[i] + arr[j] === n) return true;
+		}
 	}
 	return false;
 }

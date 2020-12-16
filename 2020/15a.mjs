@@ -1,7 +1,7 @@
-import { getRawInput, runTests } from '../lib.mjs';
+import { getRawInput, autoparse, runTests } from '../lib.mjs';
 
 const rawInput = getRawInput();
-const input = parseInput(rawInput);
+const input = autoparse(rawInput);
 
 runTests(args => run(args), [
 	[0,3,6], 436
@@ -29,8 +29,4 @@ function run(input) {
 		last = next;
 	}
 	return last;
-}
-
-function parseInput(str) {
-	return str.split(',').map(n => +n);
 }

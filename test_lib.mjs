@@ -94,6 +94,12 @@ lib.runTests(args => lib.indexOfAll(...args), [
 	['abacdaeaaf', 'a'], [0, 2, 5, 7, 8],
 ]);
 
+lib.runTests(args => lib.range(...args), [
+	[0, 10], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+	[5, 10], [5, 6, 7, 8, 9],
+	[5, 5], [],
+]);
+
 lib.runTests(args => lib.setUnion(...args), [
 	[new Set([1,2,3]), new Set([1,4,5]), new Set([4,2,3,6,5,7])], new Set([1,2,3,4,5,6,7]),
 ]);
@@ -155,6 +161,14 @@ lib.runTests(args => lib.modMulInverse(...args), [
 lib.runTests(args => lib.chineseRemainder(...args), [
 	[[4, 4, 6], [5, 7, 11]], 39,
 	[[4n, 4n, 6n], [5n, 7n, 11n]], 39n,
+]);
+
+lib.runTests(lib.astar, [
+	{ start: 0, goal: 10, neighbors: x => [x+1], heuristic: (x, goal) => goal - x },
+	{ path: [0,1,2,3,4,5,6,7,8,9,10], cost: 10 },
+
+	{ start: 0, goal: 10, neighbors: x => [x+1,x+3], heuristic: (x, goal) => x < goal ? goal - x : Infinity },
+	{ path: [0,3,6,9,10], cost: 4 },
 ]);
 
 console.log('OK');
