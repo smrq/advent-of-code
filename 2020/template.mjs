@@ -7,13 +7,8 @@ import {
 	astar, orthodiagonalOffsets, cell2d, cell3d,
 } from '../lib.mjs';
 
-const rawInput = getRawInput();
-let input;
-try { input = autoparse(rawInput); }
-catch (e) {
-	D(e);
-	input = rawInput;
-}
+const input = parseInput(getRawInput());
+D('[input]'); D(input);
 
 runTests(args => run(args), [
 
@@ -22,11 +17,9 @@ runTests(args => run(args), [
 console.log(run(input));
 
 function run(input) {
-	D(input);
 
-	let result = 0;
-	for (let item of input) {
+}
 
-	}
-	return result;
+function parseInput(str) {
+	return autoparse(str);
 }
