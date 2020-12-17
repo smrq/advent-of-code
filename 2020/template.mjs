@@ -1,6 +1,6 @@
 import {
 	D, getRawInput, autoparse, runTests,
-	PriorityQueue, memo,
+	PriorityQueue, InfiniteGrid, memo,
 	zip, sum, product, flatten, selectBy, minBy, maxBy, arrayUnion, arrayIntersection, arrayDifference, permutations, range,
 	setUnion, setIntersection, setDifference,
 	gcd, lcm, modulo, largestPowerOf2Below, powerRemainder, modMulInverse, chineseRemainder,

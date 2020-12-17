@@ -2,6 +2,52 @@ import assert from 'assert';
 import * as lib from './lib.mjs';
 
 (() => {
+	const q = new lib.PriorityQueue();
+	q.push('a0', 0);
+	q.push('b3', 3);
+	q.push('c2', 2);
+	q.push('d0', 0);
+	q.push('e4', 4);
+	q.push('f5', 5);
+
+	assert.strictEqual(q.pop(), 'a0');
+	assert.strictEqual(q.pop(), 'd0');
+	assert.strictEqual(q.pop(), 'c2');
+	assert.strictEqual(q.pop(), 'b3');
+
+	q.push('g1', 1);
+	q.push('h1', 1);
+	q.push('i1', 1);
+
+	assert.strictEqual(q.pop(), 'g1');
+	assert.strictEqual(q.pop(), 'h1');
+	assert.strictEqual(q.pop(), 'i1');
+	assert.strictEqual(q.pop(), 'e4');
+	assert.strictEqual(q.pop(), 'f5');
+})();
+
+(() => {
+	const g = new lib.InfiniteGrid(3);
+
+	assert.deepStrictEqual(g.dimensions(), [[0, 0], [0, 0], [0, 0]]);
+
+	g.set([0, 0, 0], 'a');
+
+	assert.deepStrictEqual(g.dimensions(), [[0, 0], [0, 0], [0, 0]]);
+	assert.strictEqual(g.get([0, 0, 0]), 'a');
+
+	g.set([-100, 100, -100], 'b');
+	assert.deepStrictEqual(g.dimensions(), [[-100, 0], [0, 100], [-100, 0]]);
+	assert.strictEqual(g.get([-100, 100, -100]), 'b');
+
+	g.set([-50, 150, 200], 'c');
+	assert.deepStrictEqual(g.dimensions(), [[-100, 0], [0, 150], [-100, 200]]);
+	assert.strictEqual(g.get([-50, 150, 200]), 'c');
+
+	assert.deepStrictEqual([...g.values()], ['a', 'b', 'c']);
+})();
+
+(() => {
 	let runCount = 0;
 	const f = lib.memo(x => {
 		++runCount;

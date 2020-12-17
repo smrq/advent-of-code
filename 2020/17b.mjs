@@ -1,4 +1,4 @@
-import { getRawInput, autoparse, runTests, orthodiagonalOffsets } from '../lib.mjs';
+import { getRawInput, autoparse, runTests, InfiniteGrid, orthodiagonalOffsets } from '../lib.mjs';
 
 const input = autoparse(getRawInput());
 
@@ -11,34 +11,25 @@ autoparse(`.#.
 console.log(run(input));
 
 function run(input) {
-	let grid = new Map();
+	let grid = new InfiniteGrid(4);
 	for (let y = 0; y < input.length; ++y) {
 		for (let x = 0; x < input[0].length; ++x) {
-			grid.set(`${x},${y},0,0`, input[y][x]);
+			grid.set([x,y,0,0], input[y][x]);
 		}
 	}
 
-	let fourth = [0,0];
-	let depth = [0,0];
-	let height = [0,input.length-1];
-	let width = [0,input[0].length-1];
 	let offsets = orthodiagonalOffsets(4);
 
 	for (let i = 0; i < 6; ++i) {
-		let newGrid = new Map();
+		let newGrid = new InfiniteGrid(4);
 
-		--fourth[0]; ++fourth[1];
-		--depth[0]; ++depth[1];
-		--height[0]; ++height[1];
-		--width[0]; ++width[1];
-
-		for (let w = fourth[0]; w <= fourth[1]; ++w) {
-			for (let z = depth[0]; z <= depth[1]; ++z) {
-				for (let y = height[0]; y <= height[1]; ++y) {
-					for (let x = width[0]; x <= width[1]; ++x) {
-						const self = grid.get(`${x},${y},${z},${w}`);
-						const neighbors = offsets.map(([a,b,c,d]) => `${a+x},${b+y},${c+z},${d+w}`)
-							.map(x => grid.get(x));
+		const dimensions = grid.dimensions();
+		for (let w = dimensions[3][0]-1; w <= dimensions[3][1]+1; ++w) {
+			for (let z = dimensions[2][0]-1; z <= dimensions[2][1]+1; ++z) {
+				for (let y = dimensions[1][0]-1; y <= dimensions[1][1]+1; ++y) {
+					for (let x = dimensions[0][0]-1; x <= dimensions[0][1]+1; ++x) {
+						const self = grid.get([x,y,z,w]);
+						const neighbors = offsets.map(([a,b,c,d]) => grid.get([a+x,b+y,c+z,d+w]));
 						const active = neighbors.filter(x => x === '#').length;
 
 						let c;
@@ -47,7 +38,7 @@ function run(input) {
 						} else {
 							c = (active === 3) ? '#' : '.';
 						}
-						newGrid.set(`${x},${y},${z},${w}`, c);
+						newGrid.set([x,y,z,w], c);
 					}
 				}
 			}
