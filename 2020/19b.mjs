@@ -1,5 +1,9 @@
 import { getRawInput, autoparse, runTests, flatten } from '../lib.mjs';
 
+import _PCRE_ from '@stephen-riley/pcre2-wasm';
+const PCRE = _PCRE_.default;
+await PCRE.init();
+
 const input = parseInput(getRawInput());
 
 runTests(args => run(args), [
@@ -56,33 +60,26 @@ console.log(run(input));
 
 function run([rules, input]) {
 	rules = new Map(rules.map(r => r.split(': ')));
-
-	rules.set('8', '42 | 42 8');
-	rules.set('11', '42 31 | 42 11 31');
-
-	return input.filter(i => consume(rules, '0', i).includes('')).length;
+	const re = new PCRE('^' + expand(rules, '0') + '$');
+	const result = input.filter(i => re.match(i)).length;
+	re.destroy();
+	return result;
 }
 
-function consume(rules, rule, input) {
+function expand(rules, rule) {
 	let match;
-	if (match = /^"(\w)"$/.exec(rule)) {
-		if (input[0] === match[1]) {
-			return [input.slice(1)];
-		} else {
-			return [];
-		}
-	} else if (/^(\d+)$/.test(rule)) {
-		return consume(rules, rules.get(rule), input);
+	if (rule === '8') {
+		return `(${expand(rules, '42')})+`;
+	} else if (rule === '11') {
+		return `(?'rule11'(${expand(rules, '42')})(?&rule11)?(${expand(rules, '31')}))`;
+	} else if (match = /^"(\w+)"$/.exec(rule)) {
+		return match[1];
+	} else if (/^\d+$/.test(rule)) {
+		return expand(rules, rules.get(rule));
 	} else if (/\|/.test(rule)) {
-		const subrules = rule.split(' | ');
-		return flatten(subrules.map(subrule => consume(rules, subrule, input)));
+		return '(' + rule.split(' | ').map(r => expand(rules, r)).join('|') + ')';
 	} else {
-		const subrules = rule.split(' ');
-		let result = [input];
-		for (let subrule of subrules) {
-			result = flatten(result.map(x => consume(rules, subrule, x)));
-		}
-		return result;
+		return rule.split(' ').map(r => expand(rules, r)).join('');
 	}
 }
 

@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@stephen-riley/pcre2-wasm@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@stephen-riley/pcre2-wasm/-/pcre2-wasm-1.2.4.tgz#2c0ae0adc2ec9197ab6bdd30a2841ea4edaf1060"
+  integrity sha512-c/5DGUQCQICP0iDlWA6VWztTQ158SsYSQLOXFPujqsfpZluTjE49mMpLCv+JzlcJV6FCDMXnZ+RP1/nPfAGG1Q==
+
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"

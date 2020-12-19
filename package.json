@@ -5,6 +5,7 @@
   "author": "Greg Smith <smr.kyu@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@stephen-riley/pcre2-wasm": "^1.2.4",
     "chalk": "^3.0.0"
   }
 }
