@@ -8,7 +8,12 @@
 				"*.mjs"
 			],
 			"name": "Run script",
-			"shell_cmd": "node \"$file\" | tee >(pbcopy)"
+			"osx": {
+				"shell_cmd": "node \"$file\" | tee >(pbcopy)"
+			},
+			"windows": {
+				"cmd": ["$project_path\\run_script.cmd", "$file"]
+			}
 		},
 		{
 			"file_patterns":
@@ -16,7 +21,18 @@
 				"*.txt"
 			],
 			"name": "Download input",
-			"shell_cmd": "curl -H Cookie:session=\\$(cat $project_path/session.txt) https://adventofcode.com/\\$(echo $file_path | sed 's#^$project_path/##')/day/\\$(echo $file_base_name | sed 's/^0*//')/input > $file"
+			"osx": {
+				"shell_cmd": "curl -H Cookie:session=\\$(cat $project_path/session.txt) https://adventofcode.com/\\$(echo $file_path | sed 's#^$project_path/##')/day/\\$(echo $file_base_name | sed 's/^0*//')/input > $file"
+			},
+			"windows": {
+				"cmd": ["$project_path/download_input.cmd", "$project_path\\session.txt", "$file"]
+			}
 		}
-	]
+	],
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
 }
