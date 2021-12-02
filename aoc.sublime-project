@@ -12,7 +12,7 @@
 				"shell_cmd": "node \"$file\" | tee >(pbcopy)"
 			},
 			"windows": {
-				"cmd": ["$project_path\\run_script.cmd", "$file"]
+				"cmd": ["node", "$file"]
 			}
 		},
 		{
