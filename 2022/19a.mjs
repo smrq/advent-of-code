@@ -1,4 +1,5 @@
 import * as L from '../lib.mjs';
+import { inspect } from 'util';
 
 L.runTests(args => runBlueprint(args), [
 	parseInput(`Blueprint 1: Each ore robot costs 4 ore. Each clay robot costs 2 ore. Each obsidian robot costs 3 ore and 14 clay. Each geode robot costs 2 ore and 7 obsidian.`)[0], 9,
@@ -20,49 +21,74 @@ function run(blueprints) {
 function runBlueprint({ costs }) {
 	const maxT = 24;
 
-	let states = [{ t: 0, resources: [0, 0, 0, 0], robots: [1, 0, 0, 0] }];
-	const mostGeodesByTurns = [...Array(maxT+1)].map(_ => 0);
+	const maxBots = [
+		Math.max(costs[1][0], costs[2][0], costs[3][0]),
+		costs[2][1],
+		costs[3][2],
+		Infinity
+	];
 
-	while (states.length) {
-		const nextStates = [];
-
-		L.D(`States: ${states.length}`);
-
-		for (let state of states) {
+	const path = L.astar({
+		start: { t: 0, resources: [0, 0, 0, 0], robots: [1, 0, 0, 0] },
+		goal: 'end',
+		key: node => node === 'end' ? 'end' : `${node.t}|${node.resources.join(',')}|${node.robots.join(',')}`,
+		neighbors: node => {
+			const results = ['end'];
 			for (let type = 0; type < costs.length; ++type) {
-				const ttc = calculateTimeToConstruct(costs[type], state.resources, state.robots);
-				const nextT = state.t + ttc;
+				if (node.robots[type] >= maxBots[type]) continue;
+
+				const ttc = calculateTimeToConstruct(costs[type], node.resources, node.robots);
+				const nextT = node.t + ttc;
 				if (nextT >= maxT) continue;
 
-				const nextRobots = [...state.robots];
+				const nextRobots = [...node.robots];
 				nextRobots[type] += 1;
 
-				const nextResources = L.zip(
-					generateResources(ttc, state.resources, state.robots),
-					costs[type]
-				).map(([x, cost]) => x - cost);
+				const nextResources = payResources(
+					generateResources(ttc, node.resources, node.robots),
+					costs[type]);
 
-				for (let i = 0; nextT + i <= maxT; ++i) {
-					if (mostGeodesByTurns[nextT+i] < nextResources[3] + i*nextRobots[3]) {
-						mostGeodesByTurns[nextT+i] = nextResources[3] + i*nextRobots[3];
-					}
-				}
-
-				const nextState = {
+				results.push({
 					t: nextT,
 					resources: nextResources,
 					robots: nextRobots,
-				};
-				nextStates.push(nextState);
+				});
 			}
-		}
+			return results;
+		},
+		cost: (current, neighbor) => {
+			const neighborResources = neighbor === 'end' ?
+				generateResources(maxT - current.t, current.resources, current.robots) :
+				neighbor.resources;
+			return -(neighborResources[3] - current.resources[3]);
+		},
+		heuristic: node => {
+			if (node === 'end') return 0;
 
-		states = nextStates.filter(state => state.resources[3] >= mostGeodesByTurns[state.t]);
-	}
+			const robots = [...node.robots];
+			let resourcePools = [...Array(costs.length)].map(_ => [...node.resources]);
 
-	L.D(`Geode count: ${mostGeodesByTurns[maxT]}`);
+			for (let t = node.t; t < maxT; ++t) {
+				for (let type = 0; type < resourcePools.length; ++type) {
+					const rs = resourcePools[type];
 
-	return mostGeodesByTurns[maxT];
+					if (calculateTimeToConstruct(costs[type], resourcePools[type], robots) === 1) {
+						resourcePools[type] = payResources(
+							generateResources(1, resourcePools[type], robots),
+							costs[type]);
+						robots[type] += 1;
+					} else {
+						resourcePools[type] = generateResources(1, resourcePools[type], robots);
+					}
+				}
+			}
+
+			return -(resourcePools[3][3]);
+		},
+	});
+
+	L.D(inspect(path, { depth: Infinity }));
+	return -path.cost;
 }
 
 function calculateTimeToConstruct(costs, resources, robots) {
@@ -75,6 +101,10 @@ function calculateTimeToConstruct(costs, resources, robots) {
 
 function generateResources(turns, resources, robots) {
 	return L.zip(resources, robots).map(([x, dx]) => x + turns*dx);
+}
+
+function payResources(resources, costs) {
+	return L.zip(resources, costs).map(([x, cost]) => x - cost);
 }
 
 function parseInput(str) {
