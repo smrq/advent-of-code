@@ -9,13 +9,10 @@ const input = parseInput(L.getRawInput());
 console.log(run(input));
 
 function run({ time, distance }) {
-	let winning = 0;
-	for (let held = 1; held < time; ++held) {
-		if (held * (time - held) > distance) {
-			++winning;
-		}
-	}
-	return winning;
+	// -held^2 + time*held - distance > 0
+	const minHeld = Math.ceil((time - Math.sqrt(time*time - 4*distance)) / 2);
+	const maxHeld = Math.floor((time + Math.sqrt(time*time - 4*distance)) / 2);
+	return maxHeld - minHeld + 1;
 }
 
 function parseInput(str) {
