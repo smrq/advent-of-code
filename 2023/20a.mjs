@@ -17,10 +17,7 @@ const input = parseInput(L.getRawInput());
 console.log(run(input));
 
 function generateGraph(nodes) {
-	const graph = new Map();
-	for (let node of nodes) {
-		graph.set(node.name, { ...node, src: [] });
-	}
+	const graph = new Map(nodes.map(node => [node.name, { ...node, src: [] }]));
 	for (let node of nodes) {
 		for (let dest of node.dest) {
 			if (!graph.has(dest)) {
