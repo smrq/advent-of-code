@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "@stephen-riley/pcre2-wasm": "^1.2.4",
-    "chalk": "^3.0.0"
+    "chalk": "^3.0.0",
+    "z3-solver": "^4.12.4"
   }
 }
